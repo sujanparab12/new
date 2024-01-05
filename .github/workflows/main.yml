@@ -1,0 +1,54 @@
+name: automatic Workflow
+
+on:
+  push:
+    branches:
+      - development
+      - quality_assurance
+      - production
+jobs:
+  development:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Environment
+        run: echo "Setting up environment for dev branch..."
+        if: github.event_name == 'push'
+
+
+      - name: Run Dev Job
+        run: echo "Running dev job..."
+
+  quality_assurance:
+    runs-on:  windows-latest
+    needs: development
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Environment
+        run: echo "Setting up environment for qa branch..."
+        if: github.event_name == 'push' 
+
+
+      - name: Run QA Job
+        run: echo "Running QA job..."
+
+  production:
+    runs-on:  windows-latest
+    needs: quality_assurance
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Environment
+        run: echo "Setting up environment for prod branch..."
+        if: github.event_name == 'push' 
+        
+      - name: Run Prod Job
+        run: echo "Running prod job..."
